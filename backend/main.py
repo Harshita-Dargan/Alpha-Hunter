@@ -101,7 +101,6 @@ async def analyze_csv(file: UploadFile = File(...)):
         return process_portfolio_dataframe(df, use_api_key)
     except Exception as e:
         import traceback
-        import os
         log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_log.txt")
         with open(log_path, "w") as f:
             traceback.print_exc(file=f)
