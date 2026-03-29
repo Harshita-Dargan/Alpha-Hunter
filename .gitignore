@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment Variables
+.env
+.env.local
+.venv
+venv/
+ENV/
+env/
+
+# Ide and OS
+.vscode/
+.idea/
+.DS_Store
+
+# Logs and Caches
+debug_log.txt
+.gemini_cache/
+*.log

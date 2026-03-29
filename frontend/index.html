@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha-Hunter: Terminal</title>
+    <link rel="stylesheet" href="style.css?v=6">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="background-grid"></div>
+    <div class="scan-line"></div>
+    
+    <nav class="top-nav">
+        <div class="brand">
+            <span class="logo-icon">▲</span>
+            <h1>Alpha-Hunter</h1>
+        </div>
+        <div class="system-status">
+            <div class="status-indicator"></div>
+            <span>SYNDICATE NODE: ONLINE</span>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+        <aside class="sidebar glass-panel">
+            <div class="panel-header">
+                <h2>COMMAND UPLINK</h2>
+            </div>
+            
+            <div class="control-group file-upload-group">
+                <h3>🧮 QUANT ENGINE (CSV)</h3>
+                <p class="subtext">Upload Transaction Ledger</p>
+                <div class="file-drop-area" id="csv-drop-area">
+                    <span class="icon">📊</span>
+                    <span>Drop CSV Here</span>
+                    <input type="file" id="csv-upload" accept=".csv" hidden>
+                </div>
+            </div>
+
+            <div class="control-group file-upload-group">
+                <h3>📄 NLP SCANNER (PDF)</h3>
+                <p class="subtext">Upload Statement/Presentation</p>
+                <div class="file-drop-area" id="pdf-drop-area">
+                    <span class="icon">📑</span>
+                    <span>Drop PDF Here</span>
+                    <input type="file" id="pdf-upload" accept=".pdf" hidden>
+                </div>
+            </div>
+
+            <div class="control-group" id="scenario-triggers">
+                <h3>🕹️ EVALUATION SCENARIOS</h3>
+                <button id="btn-scenario-bulk" class="cyber-button">1: Bulk Deal Analysis</button>
+                <button id="btn-scenario-tech" class="cyber-button">2: Technical Breakout</button>
+                <button id="btn-scenario-macro" class="cyber-button">3: Macro Prioritization (Needs CSV)</button>
+            </div>
+        </aside>
+
+        <section class="main-content">
+            <div class="ticker-tape-container glass-panel">
+                <div class="ticker-tape" id="market-tickers">
+                    <div class="ticker-item">Awaiting Data...</div>
+                </div>
+            </div>
+
+            <div class="agent-grid hidden" id="agent-grid">
+                <!-- Portfolio Analytics -->
+                <div class="agent-card glass-panel border-cyan">
+                    <div class="card-header">
+                        <span class="pulse-icon cyan"></span>
+                        <h2>PORTFOLIO METRICS</h2>
+                    </div>
+                    <div class="metric-display">
+                        <span class="metric-label">XIRR PERFORMANCE</span>
+                        <span class="metric-value" id="val-xirr">0.00%</span>
+                        <div class="sub-metrics">
+                            <div class="sub-metric"><span>Invested:</span> <span id="val-flows" class="highlight">₹0</span></div>
+                            <div class="sub-metric"><span>Absolute:</span> <span id="val-abs" class="highlight">0%</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Risk Auditor -->
+                <div class="agent-card glass-panel border-red">
+                    <div class="card-header">
+                        <span class="pulse-icon red"></span>
+                        <h2>RISK AUDITOR</h2>
+                    </div>
+                    <div class="terminal-window">
+                        <div class="terminal-content typewriter" id="val-risk">
+                            Awaiting analysis...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tax Optimizer -->
+                <div class="agent-card glass-panel border-purple">
+                    <div class="card-header">
+                        <span class="pulse-icon purple"></span>
+                        <h2>TAX OPTIMIZER</h2>
+                    </div>
+                    <div class="terminal-window">
+                        <div class="terminal-content typewriter" id="val-tax">
+                            Awaiting analysis...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-row hidden" id="bottom-row">
+                <div class="chart-container glass-panel border-blue">
+                    <h2>ASSET DISTRIBUTION</h2>
+                    <div style="position: relative; height: 300px; width: 100%;">
+                        <canvas id="portfolioChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="news-container glass-panel border-orange">
+                    <h2>MARKET INTELLIGENCE</h2>
+                    <div class="news-list" id="val-news">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-panel glass-panel hidden" id="scenario-panel">
+                <div class="card-header">
+                    <span class="pulse-icon cyan"></span>
+                    <h2 id="scenario-title">SCENARIO TERMINAL</h2>
+                </div>
+                <div class="terminal-window">
+                    <div class="terminal-content typewriter" id="scenario-content">
+                        Initializing Agent Protocol...
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pdf-results-panel glass-panel hidden" id="pdf-results">
+                <div class="card-header">
+                    <span class="pulse-icon purple"></span>
+                    <h2>DOCUMENT EXTRACTION LOG</h2>
+                </div>
+                <div class="terminal-window">
+                    <div class="terminal-content typewriter" id="pdf-summary">
+                        Parsing...
+                    </div>
+                </div>
+            </div>
+            
+            <div id="loading-overlay" class="hidden">
+                <div class="spinner"></div>
+                <h2 class="glitch-text" data-text="DEPLOYING AGENTS...">DEPLOYING AGENTS...</h2>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js?v=4"></script>
+</body>
+</html>
