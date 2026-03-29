@@ -84,11 +84,24 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (!res.ok) throw new Error(data.detail || 'Analysis failed');
 
-            pdfResults.classList.remove('hidden');
-            let txt = `Status: ${data.status}\n`;
-            txt += `Entities:\n- ${data.detected_assets.join('\n- ')}\n`;
-            txt += `Values:\n- ${data.extracted_amounts.join('\n- ')}\n`;
-            typeWriter(pdfSummary, txt, 20);
+            // Populate main dashboard 
+            if (data.market_data && data.performance) {
+                populateDashboard(data);
+            }
+
+            // Also show PDF extracted summary
+            if (data.pdf_summary || data.detected_assets) {
+                pdfResults.classList.remove('hidden');
+                let txt = `Status: ${data.status}\n`;
+                if(data.pdf_summary) txt += data.pdf_summary + "\n";
+                if(data.detected_assets && data.detected_assets.length > 0) {
+                    txt += `Entities:\n- ${data.detected_assets.join('\n- ')}\n`;
+                    if(data.extracted_amounts) {
+                        txt += `Values:\n- ${data.extracted_amounts.join('\n- ')}\n`;
+                    }
+                }
+                typeWriter(pdfSummary, txt, 20);
+            }
 
         } catch (err) {
             alert('Error parsing PDF: ' + err.message);

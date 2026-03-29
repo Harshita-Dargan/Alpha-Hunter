@@ -30,7 +30,11 @@ def extract_portfolio_from_pdf(uploaded_file, api_key):
         for attempt in range(4):
             try:
                 response = model.generate_content(prompt)
-                data = json.loads(response.text)
+                text = response.text.strip()
+                if text.startswith('```json'): text = text[7:]
+                elif text.startswith('```'): text = text[3:]
+                if text.endswith('```'): text = text[:-3]
+                data = json.loads(text.strip())
                 break
             except Exception as e:
                 err_str = str(e)

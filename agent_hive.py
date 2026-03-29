@@ -38,7 +38,11 @@ def resolve_tickers_with_llm(symbols, api_key):
         for attempt in range(4):
             try:
                 response = model.generate_content(prompt)
-                return json.loads(response.text)
+                text = response.text.strip()
+                if text.startswith('```json'): text = text[7:]
+                elif text.startswith('```'): text = text[3:]
+                if text.endswith('```'): text = text[:-3]
+                return json.loads(text.strip())
             except Exception as e:
                 err_str = str(e)
                 if ('429' in err_str or 'Quota' in err_str) and attempt < 3:
@@ -54,7 +58,8 @@ def resolve_tickers_with_llm(symbols, api_key):
 
 def get_portfolio_context(df, api_key):
     df.columns = df.columns.str.strip()
-    symbols = [str(s).upper().strip() for s in df['Fund Name'].unique() if pd.notna(s) and s != 'Valuation']
+    ignore_names = ['VALUATION', 'TOTAL PORTFOLIO', 'TOTALPORTFOLIO']
+    symbols = [str(s).upper().strip() for s in df['Fund Name'].unique() if pd.notna(s) and str(s).upper().strip() not in ignore_names]
     
     ticker_map = resolve_tickers_with_llm(symbols, api_key)
     
@@ -62,8 +67,16 @@ def get_portfolio_context(df, api_key):
     with ThreadPoolExecutor(max_workers=5) as executor:
         futures = []
         for s in symbols:
-            # Fallback to .NS approximation if LLM failed
-            ticker = ticker_map.get(s) or ticker_map.get(s.title()) or f"{s.replace(' ', '')}.NS"
+            if s in ticker_map:
+                ticker = ticker_map[s]
+            elif s.title() in ticker_map:
+                ticker = ticker_map[s.title()]
+            else:
+                ticker = f"{s.replace(' ', '')}.NS"
+                
+            if not ticker or str(ticker).lower() == 'null':
+                continue
+                
             futures.append(executor.submit(fetch_ticker_data, s, ticker))
         
         for future in futures:
